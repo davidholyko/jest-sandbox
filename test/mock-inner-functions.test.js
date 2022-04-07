@@ -1,9 +1,9 @@
-const addModule = require('../src/add');
-const helperModule = require('../src/addHelper');
+const addModule = require('../src/mock-inner-functions/add');
+const helperModule = require('../src/mock-inner-functions/addHelper');
 
 // addHelper mock gets hoisted to the top
 // and is the first thing that runs
-jest.mock('../src/addHelper');
+jest.mock('../src/mock-inner-functions/addHelper');
 
 describe('add', () => {
   beforeEach(() => {
