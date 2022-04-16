@@ -1,5 +1,13 @@
 # Jest Sandbox
 
+## Test Cases
+
+### 1. [Mocking Inner Functions](#mocking-inner-functions)
+
+### 2. [Mocking Extended Class Methods](#mocking-extended-class-methods)
+
+### 3. [Mocking Objects](#mocking-objects)
+
 ## Instructions
 
 ```
@@ -11,18 +19,23 @@ npm test
 
 ## Mocking Inner Functions
 
-```javascript
-const { doAdd } = require('./addHelper');
+### Source Code
 
+```javascript
+// addHelper.js
+function doAdd(c, d) {
+  return c + d;
+}
+
+// add.js
 function add(a, b) {
   return doAdd(a, b);
 }
 ```
 
-```javascript
-const addModule = require('../src/mock-inner-functions/add');
-const helperModule = require('../src/mock-inner-functions/addHelper');
+### Test Code
 
+```javascript
 // addHelper mock gets hoisted to the top
 // and is the first thing that runs
 jest.mock('../src/mock-inner-functions/addHelper');
@@ -37,7 +50,7 @@ describe('add', () => {
     // hook into doAdd helper method and intercept its return value
     jest.spyOn(helperModule, 'doAdd').mockReturnValue(11);
 
-    expect(addModule.add()).toEqual(11);
+    expect(addModule.add(100, 200)).toEqual(11);
     expect(helperModule.doAdd).toBeCalled();
   });
 });
@@ -45,7 +58,10 @@ describe('add', () => {
 
 ## Mocking Extended Class Methods
 
+### Source Code
+
 ```javascript
+// BaseClass.js
 class BaseClass {
   constructor() {
     this.foo = 'bar';
@@ -56,6 +72,7 @@ class BaseClass {
   }
 }
 
+// ExtendedClass.js
 class ExtendedClass extends BaseClass {
   constructor() {
     super();
@@ -68,10 +85,9 @@ class ExtendedClass extends BaseClass {
 }
 ```
 
-```javascript
-const BaseClass = require('../src/mock-super-methods/BaseClass');
-const ExtendedClass = require('../src/mock-super-methods/ExtendedClass');
+### Test Code
 
+```javascript
 describe('ExtendedClass', () => {
   describe('getFoo', () => {
     it('should get value from BaseClass.foo', () => {
@@ -85,6 +101,45 @@ describe('ExtendedClass', () => {
 
       expect(myFoo).toEqual(interceptedValue + foo);
     });
+  });
+});
+```
+
+## Mocking Objects
+
+### Source Code
+
+```javascript
+// myOtherModule.js
+const myOtherModule = {
+  foo: 'bar',
+};
+
+// myModule.js
+const myOtherModule = require('./myOtherModule');
+
+const performAction = () => {
+  // should console log "bar"
+  console.log(myOtherModule.foo);
+};
+```
+
+### Test Code
+
+```javascript
+jest.mock('../src/mock-object/myOtherModule', () => {
+  return {
+    foo: 'foo',
+  };
+});
+
+describe('myModule', () => {
+  it('performAction should console log myOtherModule.foo as "foo"', () => {
+    jest.spyOn(console, 'log').mockImplementation();
+
+    myModule.performAction();
+
+    expect(console.log).toBeCalledWith('foo');
   });
 });
 ```
