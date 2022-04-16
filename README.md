@@ -1,12 +1,14 @@
 # Jest Sandbox
 
+![Unit Tests](https://github.com/davidholyko/jest-sandbox/actions/workflows/unit-tests.yml/badge.svg)
+
 ## Test Cases
 
-### 1. [Mocking Inner Functions](#mocking-inner-functions)
+#### [1. Mocking Inner Functions](#mocking-inner-functions)
 
-### 2. [Mocking Extended Class Methods](#mocking-extended-class-methods)
+#### [2. Mocking Inherited Class Methods](#mocking-inherited-class-methods)
 
-### 3. [Mocking Objects](#mocking-objects)
+#### [3. Mocking Objects](#mocking-objects)
 
 ## Instructions
 
@@ -19,7 +21,7 @@ npm test
 
 ## Mocking Inner Functions
 
-### Source Code
+#### Source Code
 
 ```javascript
 // addHelper.js
@@ -33,7 +35,7 @@ function add(a, b) {
 }
 ```
 
-### Test Code
+#### Test Code
 
 ```javascript
 // addHelper mock gets hoisted to the top
@@ -56,9 +58,9 @@ describe('add', () => {
 });
 ```
 
-## Mocking Extended Class Methods
+## Mocking Inherited Class Methods
 
-### Source Code
+#### Source Code
 
 ```javascript
 // BaseClass.js
@@ -85,7 +87,7 @@ class ExtendedClass extends BaseClass {
 }
 ```
 
-### Test Code
+#### Test Code
 
 ```javascript
 describe('ExtendedClass', () => {
@@ -107,7 +109,7 @@ describe('ExtendedClass', () => {
 
 ## Mocking Objects
 
-### Source Code
+#### Source Code
 
 ```javascript
 // myOtherModule.js
@@ -116,15 +118,13 @@ const myOtherModule = {
 };
 
 // myModule.js
-const myOtherModule = require('./myOtherModule');
-
 const performAction = () => {
   // should console log "bar"
   console.log(myOtherModule.foo);
 };
 ```
 
-### Test Code
+#### Test Code
 
 ```javascript
 jest.mock('../src/mock-object/myOtherModule', () => {
